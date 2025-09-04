@@ -1,0 +1,105 @@
+/* CSS file: css/style.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.input-section {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#button-count-label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#button-count {
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    width: 60px;
+    text-align: center;
+}
+
+#go-button {
+    padding: 8px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#go-button:hover {
+    background-color: #45a049;
+}
+
+#game-area {
+    position: relative;
+    min-height: 400px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+#message {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    min-height: 30px;
+    padding: 10px;
+}
+
+.game-button {
+    position: absolute;
+    width: 10em;
+    height: 5em;
+    border: 2px solid #333;
+    border-radius: 5px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.game-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.game-button.clickable {
+    cursor: pointer;
+}
+
+.success-message {
+    color: #4CAF50;
+}
+
+.error-message {
+    color: #f44336;
+}
