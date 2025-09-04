@@ -206,7 +206,10 @@ class MemoryGame {
             return;
         }
 
-        // Move each button to a new random position
+        // Get fresh window dimensions before each scramble
+        const dimensions = this.positionManager.getWindowDimensions();
+        
+        // Move each button to a new random position within bounds
         this.buttons.forEach(button => {
             const newPosition = this.positionManager.getRandomPosition();
             button.setPosition(newPosition.x, newPosition.y);
