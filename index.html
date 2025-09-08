@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Memory Game</title>
+    <title>Memory Game</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container">
+    <div class="game-container">
         <div class="input-section">
-            <label id="button-count-label"></label>
-            <input type="number" id="button-count" min="3" max="7" value="4">
-            <button id="go-button">Go!</button>
+            <label for="buttonCount" id="input-label"></label>
+            <input type="number" id="buttonCount" min="3" max="7">
+            <button id="goButton">Go</button>
         </div>
         <div id="game-area"></div>
-        <div id="message"></div>
+        <div id="message-area"></div>
     </div>
-    
+
     <script src="lang/messages/en/user.js"></script>
     <script src="js/script.js"></script>
 </body>
