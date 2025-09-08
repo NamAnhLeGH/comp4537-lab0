@@ -1,6 +1,3 @@
-// Messages for the Memory Game
-// Note: Used ChatGPT for assistance with message organization
-
 const MESSAGES = {
     INPUT_LABEL: "How many buttons to create?",
     EXCELLENT_MEMORY: "Excellent memory!",

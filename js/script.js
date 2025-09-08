@@ -1,15 +1,13 @@
-// Memory Game - Object-Oriented JavaScript Implementation
 // Note: Used ChatGPT for assistance with game logic optimization and class structure
 
-// All constants declared at top - no hardcoded values
 const GAME_CONFIG = {
     MIN_BUTTONS: 3,
     MAX_BUTTONS: 7,
     DEFAULT_BUTTONS: 3,
     BUTTON_WIDTH: 10, // em
     BUTTON_HEIGHT: 5, // em
-    SCRAMBLE_INTERVAL: 2000, // ms (2 seconds between scrambles)
-    DISPLAY_PAUSE_MULTIPLIER: 1000 // ms per button (n seconds for n buttons)
+    SCRAMBLE_INTERVAL: 2000, // ms
+    DISPLAY_PAUSE_MULTIPLIER: 1000 // ms
 };
 
 const CSS_CLASSES = {
