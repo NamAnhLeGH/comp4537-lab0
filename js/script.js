@@ -1,12 +1,14 @@
+// Note: Used ChatGPT for assistance with game logic optimization and class structure
+
 const GAME_CONFIG = {
   MIN_BUTTONS: 3,
   MAX_BUTTONS: 7,
   DEFAULT_BUTTONS: 3,
   STARTING_NUMBER: 1,
-  BUTTON_WIDTH: 10,
-  BUTTON_HEIGHT: 5,
-  SCRAMBLE_INTERVAL: 2000,
-  DISPLAY_PAUSE_MULTIPLIER: 1000,
+  BUTTON_WIDTH: 10, // em
+  BUTTON_HEIGHT: 5, // em
+  SCRAMBLE_INTERVAL: 2000, // ms
+  DISPLAY_PAUSE_MULTIPLIER: 1000, // ms
   ANIMATION_DURATION: 500,
   COLORS: [
     "#FF0000",
@@ -16,7 +18,7 @@ const GAME_CONFIG = {
     "#FF00FF",
     "#00FFFF",
     "#FFA500",
-  ],
+  ], // Red, Green, Blue, Yellow, Magenta, Cyan, Orange
 };
 
 const POSITIONING_CONFIG = {
@@ -30,18 +32,16 @@ const POSITIONING_CONFIG = {
   MAX_ATTEMPTS: 50,
 };
 
-// Game button representation
+// Button class to represent individual game buttons
 class GameButton {
   constructor(number, color) {
     this.number = number;
     this.color = color;
     this.element = null;
-    this.originalPosition = { x: 0, y: 0 };
     this.currentPosition = { x: 0, y: 0 };
     this.isClickable = false;
   }
 
-  // Create DOM element
   createElement() {
     this.element = document.createElement("button");
     this.element.className = "game-button";
@@ -50,6 +50,7 @@ class GameButton {
     this.element.style.left = this.currentPosition.x + "px";
     this.element.style.top = this.currentPosition.y + "px";
 
+    // Add click event listener
     this.element.addEventListener("click", () => {
       if (this.isClickable) {
         game.handleButtonClick(this.number);
@@ -59,7 +60,6 @@ class GameButton {
     return this.element;
   }
 
-  // Set button position
   setPosition(x, y) {
     this.currentPosition = { x, y };
     if (this.element) {
@@ -68,12 +68,6 @@ class GameButton {
     }
   }
 
-  // Store original position
-  setOriginalPosition(x, y) {
-    this.originalPosition = { x, y };
-  }
-
-  // Animate to position
   animateToPosition(x, y) {
     return new Promise((resolve) => {
       if (this.element) {
@@ -86,21 +80,18 @@ class GameButton {
     });
   }
 
-  // Hide button number
   hideNumber() {
     if (this.element) {
       this.element.textContent = "";
     }
   }
 
-  // Show button number
   showNumber() {
     if (this.element) {
       this.element.textContent = this.number;
     }
   }
 
-  // Set clickable state
   setClickable(clickable) {
     this.isClickable = clickable;
     if (this.element) {
@@ -110,7 +101,7 @@ class GameButton {
   }
 }
 
-// Main game controller
+// Game controller class
 class MemoryGame {
   constructor() {
     this.buttons = [];
@@ -121,7 +112,6 @@ class MemoryGame {
     this.isScrambling = false;
   }
 
-  // Get unique colors
   getUniqueColors(count) {
     const availableColors = [...GAME_CONFIG.COLORS];
     const selectedColors = [];
@@ -129,21 +119,12 @@ class MemoryGame {
     for (let i = 0; i < count; i++) {
       const randomIndex = Math.floor(Math.random() * availableColors.length);
       selectedColors.push(availableColors[randomIndex]);
-      availableColors.splice(randomIndex, 1);
+      availableColors.splice(randomIndex, 1); // Remove the picked color
     }
 
     return selectedColors;
   }
 
-  // Get window dimensions
-  getWindowDimensions() {
-    return {
-      width: window.innerWidth,
-      height: window.innerHeight,
-    };
-  }
-
-  // Check button overlap
   isOverlapping(rect1, rect2, buffer = POSITIONING_CONFIG.MIN_SPACING) {
     return !(
       rect1.right + buffer < rect2.left ||
@@ -153,7 +134,6 @@ class MemoryGame {
     );
   }
 
-  // Get button bounds
   getButtonBounds(x, y) {
     const fontSize = parseFloat(getComputedStyle(document.body).fontSize) || 16;
     const buttonWidth = GAME_CONFIG.BUTTON_WIDTH * fontSize;
@@ -167,7 +147,6 @@ class MemoryGame {
     };
   }
 
-  // Random non-overlapping position
   getRandomPositionNoOverlap(existingPositions = []) {
     const fontSize = parseFloat(getComputedStyle(document.body).fontSize) || 16;
     const buttonWidth = GAME_CONFIG.BUTTON_WIDTH * fontSize;
@@ -220,38 +199,11 @@ class MemoryGame {
     };
   }
 
-  // Get random position
-  getRandomPosition() {
-    const fontSize = parseFloat(getComputedStyle(document.body).fontSize) || 16;
-    const buttonWidth = GAME_CONFIG.BUTTON_WIDTH * fontSize;
-    const buttonHeight = GAME_CONFIG.BUTTON_HEIGHT * fontSize;
-
-    const gameArea = this.gameArea;
-    const gameAreaRect = gameArea.getBoundingClientRect();
-
-    const sideMargin = POSITIONING_CONFIG.SIDE_MARGIN;
-    const topBottomMargin = POSITIONING_CONFIG.TOP_BOTTOM_MARGIN;
-
-    const safeWidth = gameAreaRect.width - sideMargin * 2 - buttonWidth;
-    const safeHeight = gameAreaRect.height - topBottomMargin * 2 - buttonHeight;
-
-    const maxX = Math.max(0, safeWidth);
-    const maxY = Math.max(0, safeHeight);
-
-    const randomX = sideMargin + Math.random() * maxX;
-    const randomY = topBottomMargin + Math.random() * maxY;
-
-    return {
-      x: randomX,
-      y: randomY,
-    };
-  }
-
-  // Create game buttons
   async createButtons(count) {
     this.clearGame();
     this.buttons = [];
 
+    // Get unique colors for all buttons
     const uniqueColors = this.getUniqueColors(count);
 
     for (let i = 0; i < count; i++) {
@@ -268,7 +220,6 @@ class MemoryGame {
     this.startMemoryTest();
   }
 
-  // Display buttons row
   displayButtonsInRow() {
     const fontSize = parseFloat(getComputedStyle(document.body).fontSize) || 16;
     const buttonWidth = GAME_CONFIG.BUTTON_WIDTH * fontSize;
@@ -290,7 +241,6 @@ class MemoryGame {
       }
 
       button.setPosition(currentX, currentY);
-      button.setOriginalPosition(currentX, currentY);
 
       const element = button.createElement();
       this.gameArea.appendChild(element);
@@ -299,14 +249,11 @@ class MemoryGame {
     });
   }
 
-  // Scramble button positions
   async scrambleButtons(count) {
     this.isScrambling = true;
     this.showMessage(MESSAGES.SCRAMBLING);
 
     for (let i = 0; i < count; i++) {
-      this.getWindowDimensions();
-
       const newPositions = [];
       for (let j = 0; j < this.buttons.length; j++) {
         const newPos = this.getRandomPositionNoOverlap(newPositions);
@@ -330,7 +277,6 @@ class MemoryGame {
     this.isScrambling = false;
   }
 
-  // Start memory test
   startMemoryTest() {
     this.buttons.forEach((button) => {
       button.hideNumber();
@@ -342,12 +288,10 @@ class MemoryGame {
     this.currentClickIndex = 0;
   }
 
-  // Wait for time
   waitForTime(milliseconds) {
     return new Promise((resolve) => setTimeout(resolve, milliseconds));
   }
 
-  // Clear game area
   clearGame() {
     this.gameArea.innerHTML = "";
     this.messageArea.textContent = "";
@@ -357,13 +301,11 @@ class MemoryGame {
     this.isScrambling = false;
   }
 
-  // Show game message
   showMessage(message, className = "") {
     this.messageArea.textContent = message;
     this.messageArea.className = className;
   }
 
-  // Handle button clicks
   handleButtonClick(buttonNumber) {
     if (!this.isGameActive || this.isScrambling) {
       return;
@@ -388,7 +330,6 @@ class MemoryGame {
     }
   }
 
-  // Reveal all numbers
   revealAllNumbers() {
     this.buttons.forEach((button) => {
       button.showNumber();
@@ -397,9 +338,8 @@ class MemoryGame {
   }
 }
 
-// Input validation utility
+// Input validator class
 class InputValidator {
-  // Validate button count
   static validateButtonCount(input) {
     let num = parseInt(input);
 
@@ -419,9 +359,9 @@ class InputValidator {
   }
 }
 
+// Initialize game
 let game;
 
-// Initialize game setup
 document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("input-label").textContent = MESSAGES.INPUT_LABEL;
   document.getElementById("buttonCount").value = GAME_CONFIG.DEFAULT_BUTTONS;
@@ -438,7 +378,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Start game function
 async function startGame() {
   const input = document.getElementById("buttonCount").value;
   const buttonCount = InputValidator.validateButtonCount(input);
